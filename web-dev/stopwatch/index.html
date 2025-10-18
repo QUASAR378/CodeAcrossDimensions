@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #stopwatch {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        button {
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>STOPWATCH</h1>
+    <div id="stopwatch">
+        <span id="minutes">00</span>:<span id="seconds">00</span>:<span id="milliseconds">00</span>
+    </div>
+    <button id="startStopBtn">Start/Stop</button>
+    <button id="pauseBtn">Pause</button>
+    <button id="resetBtn">Reset</button><br>
+    <button id="lapBtn">Lap</button>
+    <script>
+        let minutes = 0;
+        let seconds = 0;
+        let milliseconds = 0;
+        let interval;
+        let isRunning = false;
+
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+        const millisecondsEl = document.getElementById('milliseconds');
+        const startStopBtn = document.getElementById('startStopBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const lapBtn = document.getElementById('lapBtn');
+
+        function updateDisplay() {
+            minutesEl.textContent = String(minutes).padStart(2, '0');
+            secondsEl.textContent = String(seconds).padStart(2, '0');
+            millisecondsEl.textContent = String(milliseconds).padStart(2, '0');
+        }
+
+        function startStopwatch() {
+            if (!isRunning) {
+                interval = setInterval(() => {
+                    milliseconds++;
+                    if (milliseconds === 100) {
+                        milliseconds = 0;
+                        seconds++;
+                    }
+                    if (seconds === 60) {
+                        seconds = 0;
+                        minutes++;
+                    }
+                    updateDisplay();
+                }, 10);
+                isRunning = true;
+            } else {
+                clearInterval(interval);
+                isRunning = false;
+            }
+        }
+
+        function pauseStopwatch() {
+            if (isRunning) {
+                clearInterval(interval);
+                isRunning = false;
+            }
+        }
+
+        function resetStopwatch() {
+            clearInterval(interval);
+            isRunning = false;
+            minutes = 0;
+            seconds = 0;
+            milliseconds = 0;
+            updateDisplay();
+        }
+
+        function lapTime() {
+            alert(`Lap Time: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}:${String(milliseconds).padStart(2, '0')}`);
+        }
+
+        startStopBtn.addEventListener('click', startStopwatch);
+        pauseBtn.addEventListener('click', pauseStopwatch);
+        resetBtn.addEventListener('click', resetStopwatch);
+        lapBtn.addEventListener('click', lapTime);
+
+        updateDisplay();
+    </script>
+
+</body>
+</html>
